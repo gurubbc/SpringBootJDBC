@@ -22,4 +22,9 @@ public class CustomerController {
 		System.out.println("CustomerController method is called...");
 		return customerService.insertCustomer(newCustomer);
 	}
+	@RequestMapping(value = "/customers", method = RequestMethod.GET)
+	public List<Customer> getAllCustomers() {
+		return customerService.getAllCustomers();
+	}
+	
 }
