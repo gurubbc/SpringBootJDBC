@@ -53,37 +53,29 @@ public class CustomerDAO extends JdbcDaoSupport{
 			return ResponseEntity.status(500).body("Customer object has not been inserted into customer table");
 		}
 	}
-	
-//	public ResponseEntity<Object> insertCustomer(Customer customer) {
-//		// This will generated the prepared statement in the background
-//		String sql="INSERT INTO CUSTOMER (FIRST_NAME, LAST_NAME, PHONE_NUMBER, EMAIL_ID) VALUES(?,?,?,?)";
-//		JdbcTemplate jdbcTemplate=getJdbcTemplate();
-//		
-//		KeyHolder keyHolder = new GeneratedKeyHolder(); // used to capture the generated primary key value
-//		// it has update() method call this method for insert, delete and update operations
-//		int rowsAffected=jdbcTemplate.update(
-//				connection -> {
-//					var ps=connection.prepareStatement(sql, new String[] {"CUSTOMER_ID"});
-//		            ps.setString(1, customer.getFirstName());
-//		            ps.setString(2, customer.getLastName());
-//		            ps.setLong(3, customer.getPhoneNumber());
-//		            ps.setString(4, customer.getEmailId());
-//		            return ps;
-//		}, keyHolder);
-//		
-//		if (rowsAffected>0) {
-////			long generatedCustomerId=keyHolder.getKey().longValue();
-//			return ResponseEntity.status(201).body("customer record inserted ");
-//		
-//		}
-//		else {
-//			return ResponseEntity.status(500).body("Customer record insertion failed");
-//		}
-//		
-//		
-//		
-//		
-//	}
+	// 2nd method
+public ArrayList<Customer> getAllCustomers() {
+		String sql = "SELECT * FROM customer";
+		JdbcTemplate jdbcTemplate=getJdbcTemplate(); // returns an object of JdbcTemplate class
+		List <Map <String, Object>> rows=jdbcTemplate.queryForList(sql);
+		// Create a list of Customer objects that to be returned from this method
+		// Let's iterate this data structure and create a list of Customer objects
+		ArrayList<Customer> allCustomers=new ArrayList();
+		for (Map<String,Object> row: rows) {
+			Customer cust=new Customer(); // For every row, create an Customer object
+			cust.setCustomerId((Integer)row.get("CUSTOMER_ID"));
+			cust.setFirstName((String)row.get("FIRST_NAME"));
+			cust.setLastName((String)row.get("LAST_NAME"));
+			cust.setPhoneNumber((Long)row.get("PHONE_NUMBER"));
+			cust.setEmailId((String)row.get("EMAIL_ID"));
+			allCustomers.add(cust);
+			
+		}
+		// return the list of customer objects
+		return allCustomers;
+		
+		
+	}
 	
 	
 	
